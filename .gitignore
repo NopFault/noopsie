@@ -1,0 +1,4 @@
+/target
+/blog
+/blog/*
+Cargo.lock
