@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 clinop = { git = "https://github.com/NopFault/clinop", branch = "master" }
+regex = "1.10.3"
