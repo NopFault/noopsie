@@ -1,4 +1,4 @@
-use crate::file::{Post, TFile, Template};
+use crate::file::{Post, TFile, Template, Config};
 use clinop::CliNop;
 use std::env;
 
@@ -11,8 +11,13 @@ fn main() {
 
     // Config
     let config_file = TFile::new(format!("{}/{}.{}", template_base, "config", "cfg"));
-    let config = config_file.to_config();
+    let config = config_file.to_config().unwrap();
     println!("Config: {:?}", config);
+
+
+
+    // Try config get
+    println!("Per page should display {:?} items!", config.get(String::from(Config::PER_PAGE)));
 
     // Template
     let template_file: TFile = TFile::new(format!(

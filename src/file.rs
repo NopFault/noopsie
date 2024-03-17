@@ -23,7 +23,7 @@ impl TFile {
     }
 
     pub fn to_config(&self) -> Option<Config> {
-        let mut per_page: u32 = 0;
+        let mut config: Config = Config::new();
 
         let contents = self.read().unwrap_or_else(|_| String::from(""));
         let lines: Vec<&str> = contents.trim().split('\n').collect();
@@ -31,10 +31,10 @@ impl TFile {
         for line in lines {
             if line.chars().nth(0).unwrap_or(';') != ';' {
                 let params: Vec<&str> = line.trim().split('=').collect();
-                if params[0].trim() == "per_page" {
-                    per_page = params[1].parse::<u32>().unwrap_or(0);
+                if params[0].trim() == Config::PER_PAGE {
+                    config.add(String::from(Config::PER_PAGE), AttributeType::Uint(params[1].parse::<u32>().unwrap()));
                 }
-                return Some(Config::new(self.path.clone(), per_page));
+                return Some(config);
             }
         }
         None
@@ -132,13 +132,40 @@ impl Fileable for Post {
 // Config file
 //
 #[derive(Debug, Clone)]
+enum AttributeType {
+    Uint(u32),
+    Int(i32),
+    String(String),
+}
+
+#[derive(Debug, Clone)]
+pub struct Attribute {
+    key: String,
+    value: AttributeType,
+}
+
+#[derive(Debug, Clone)]
 pub struct Config {
-    path: String,
-    per_page: u32,
+    pub attributes: Vec<Attribute>
 }
 
 impl Config {
-    pub fn new(path: String, per_page: u32) -> Config {
-        Config { path, per_page }
+    pub const PER_PAGE: &str = "per_page";
+
+    pub fn new() -> Self {
+        Config {
+            attributes: Vec::new(),
+        }
     }
+
+    pub fn add(&mut self, key: String, val: AttributeType) -> &mut Self {
+        self.attributes.push(Attribute{ key, value: val});
+        return self;
+    }
+
+    pub fn get(self, key:String) -> Attribute {
+        self.attributes.iter().find(|attr| attr.key == key).cloned().unwrap()
+    }
+
+
 }
