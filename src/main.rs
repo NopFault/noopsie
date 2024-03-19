@@ -1,8 +1,8 @@
-use crate::file::{Post, TFile, Template, Config};
+use crate::models::{TFile, Config};
 use clinop::CliNop;
 use std::env;
 
-mod file;
+pub mod models;
 
 fn main() {
     let arguments: CliNop = CliNop::new(env::args().collect());
