@@ -1,4 +1,6 @@
 /target
 /blog
 /blog/*
+/public
+/public/*
 Cargo.lock
