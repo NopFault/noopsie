@@ -7,8 +7,8 @@ pub enum AttributeType {
 
 #[derive(Debug, Clone)]
 pub struct Attribute {
-    key: String,
-    value: AttributeType,
+    pub key: String,
+    pub value: AttributeType,
 }
 
 #[derive(Debug, Clone)]
@@ -17,7 +17,7 @@ pub struct Config {
 }
 
 impl Config {
-    pub const PER_PAGE: &str = "per_page";
+    pub const PER_PAGE: &'static str = "per_page";
 
     pub fn new() -> Self {
         Config {
@@ -27,7 +27,7 @@ impl Config {
 
     pub fn add(&mut self, key: String, val: AttributeType) -> &mut Self {
         self.attributes.push(Attribute{ key, value: val});
-        return self;
+        self
     }
 
     pub fn get(self, key:String) -> Attribute {

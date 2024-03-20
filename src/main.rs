@@ -1,8 +1,18 @@
-use crate::models::{TFile, Config};
+use crate::models::{FileManager, Config, AttributeType, Template};
 use clinop::CliNop;
 use std::env;
 
 pub mod models;
+
+
+fn build(template_location: String) {
+    FileManager::build_dirs();
+    println!("    * Public deleted <-> Created");
+
+
+    println!("--- [ Template ] ---");
+    let _ = Template::generate(template_location);
+}
 
 fn main() {
     let arguments: CliNop = CliNop::new(env::args().collect());
@@ -10,25 +20,20 @@ fn main() {
     let template_base = arguments.get::<String>("template").unwrap();
 
     // Config
-    let config_file = TFile::new(format!("{}/{}.{}", template_base, "config", "cfg"));
+    let config_file = FileManager::new(format!("{}/{}.{}", template_base, "config", "cfg"));
     let config = config_file.to_config().unwrap();
-    println!("Config: {:?}", config);
 
 
+    let per_page = match config.get(String::from(Config::PER_PAGE)).value {
+        AttributeType::Uint(val) => val,
+        _ => 5 // default
+    };
 
-    // Try config get
-    println!("Per page should display {:?} items!", config.get(String::from(Config::PER_PAGE)));
+    println!("DEBUG: ");
+    println!("--- [ Config ] ---");
+    println!("PER_PAGE: {:?}", per_page);
 
-    // Template
-    let template_file: TFile = TFile::new(format!(
-        "{}/{}/{}.{}",
-        template_base, "templates", "index", "html"
-    ));
-    let template = template_file.to_template(String::from("index.html"));
-    println!("Template: {:?}", template);
+    println!("--- [ Build ] ---");
+    build(template_base.clone());
 
-    let template_content = template.contents();
-    println!("TC: {:?}", template_content);
-
-    // Post
 }
