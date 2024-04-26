@@ -69,10 +69,10 @@ impl FileManager {
         file.write_all(content.as_bytes()).unwrap();
     }
 
-    pub fn build_dirs() {
-        if Path::new("./public").is_dir() {
-            fs::remove_dir_all("./public").unwrap();
+    pub fn create_dir(dir: String) {
+        if Path::new(&dir).is_dir() {
+            fs::remove_dir_all(&dir).unwrap();
         }
-        fs::create_dir("./public").unwrap();
+        fs::create_dir(&dir).unwrap();
     }
 }

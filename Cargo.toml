@@ -7,4 +7,5 @@ edition = "2021"
 
 [dependencies]
 clinop = { git = "https://github.com/NopFault/clinop", branch = "master" }
+pulldown-cmark = "0.10.0"
 regex = "1.10.3"
